@@ -18,7 +18,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 244, 235, 220),
+        backgroundColor: Color.fromARGB(255, 24, 235, 220),
         appBar: AppBar(
           title: Text("Home Screen"),
         ),
