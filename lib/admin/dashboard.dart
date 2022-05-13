@@ -15,9 +15,7 @@ class _DashboardState extends State<Dashboard> {
   final AuthenticationService _auth = AuthenticationService();
 
   TextEditingController _genderContoller = TextEditingController();
-  TextEditingController _yearController = TextEditingController();
   TextEditingController _departmentContoller = TextEditingController();
-  TextEditingController _semesterController = TextEditingController();
   TextEditingController _sapController = TextEditingController();
 
   String userID = "";
@@ -33,10 +31,9 @@ class _DashboardState extends State<Dashboard> {
     userID = getUser.uid;
   }
 
-  updateData(String gender, int ad_year, String department, int semester,
-      double sap_id, String userID) async {
-    await DatabaseManager()
-        .updateUserList(gender, ad_year, department, semester, sap_id, userID);
+  updateData(
+      String gender, String department, double sap_id, String userID) async {
+    await DatabaseManager().updateAdminList(gender, department, sap_id, userID);
   }
 
   @override
@@ -70,16 +67,6 @@ class _DashboardState extends State<Dashboard> {
                 height: 10,
               ),
               TextField(
-                controller: _yearController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter Year',
-                    hintText: 'Enter Your Year'),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              TextField(
                 controller: _departmentContoller,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -88,16 +75,6 @@ class _DashboardState extends State<Dashboard> {
               ),
               SizedBox(
                 height: 10,
-              ),
-              TextField(
-                controller: _semesterController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: 'Enter Your Semester',
-                    hintText: 'Enter Your Semester'),
-              ),
-              SizedBox(
-                height: 30,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -126,17 +103,11 @@ class _DashboardState extends State<Dashboard> {
   }
 
   submitAction(BuildContext context) {
-    updateData(
-        _genderContoller.text,
-        int.parse(_yearController.text),
-        _departmentContoller.text,
-        int.parse(_semesterController.text),
-        double.parse(_sapController.text),
-        userID);
+    updateData(_genderContoller.text, _departmentContoller.text,
+        double.parse(_sapController.text), userID);
     _genderContoller.clear();
-    _yearController.clear();
+
     _departmentContoller.clear();
-    _semesterController.clear();
     _sapController.clear();
   }
 }

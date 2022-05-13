@@ -18,6 +18,21 @@ class AuthenticationService {
       print(e.toString());
     }
   }
+
+  //registration for admin
+  Future createAdminUser(String name, String email, String password) async {
+    try {
+      UserCredential result = await _auth.createUserWithEmailAndPassword(
+          email: email, password: password);
+      User? user = result.user;
+      await DatabaseManager()
+          .createAdminData(name, 'Male', 'IT', 3, user!.uid, email);
+      return user;
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
 // sign with email and password
 
   Future loginUser(String email, String password) async {

@@ -5,7 +5,7 @@ import 'package:image_firebase/student/joinTeam.dart';
 // import 'dart:io';
 // import 'package:image_firebase/admin/teams.dart';
 // import 'package:image_firebase/admin/profile.dart';
-// import 'package:image_firebase/admin/createTeams.dart';
+import 'package:image_firebase/admin/createTeams.dart';
 
 class HomeScreenStudent extends StatefulWidget {
   const HomeScreenStudent({Key? key}) : super(key: key);
@@ -18,7 +18,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 24, 235, 220),
+        backgroundColor: Color.fromARGB(255, 244, 235, 220),
         appBar: AppBar(
           title: Text("Home Screen"),
         ),
@@ -80,7 +80,7 @@ class _HomeScreenStudentState extends State<HomeScreenStudent> {
                     backgroundColor: new Color(0xFFE57373),
                     onPressed: () {
                       Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => JoinTeams()));
+                          MaterialPageRoute(builder: (context) => Teams()));
                     },
                   ),
                   FloatingActionButton(

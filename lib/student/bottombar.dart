@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:image_firebase/admin/homescreen.dart';
-import 'package:image_firebase/admin/teams.dart';
-import 'package:image_firebase/admin/profile.dart';
+import 'package:image_firebase/student/homescreen.dart';
+import 'package:image_firebase/student/teams.dart';
+import 'package:image_firebase/student/profile.dart';
 
 class BottomBar extends StatefulWidget {
   const BottomBar({Key? key}) : super(key: key);

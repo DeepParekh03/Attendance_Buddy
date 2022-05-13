@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:image_firebase/admin/dashboard.dart';
+import 'package:image_firebase/student/dashboard.dart';
 import 'dart:ui' as ui;
 import 'dart:io';
 

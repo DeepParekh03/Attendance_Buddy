@@ -23,12 +23,9 @@ class _ProfileState extends State<Profile> {
   final AuthenticationService _auth = AuthenticationService();
 
   String userID = "";
-
-  int ad_year = 0;
   String name = " ";
   String department = "";
   String gender = "";
-  int semester = 0;
   double sap_id = 0.0;
 
   @override
@@ -42,17 +39,14 @@ class _ProfileState extends State<Profile> {
     userID = getUser.uid;
     if (getUser != null)
       await FirebaseFirestore.instance
-          .collection('profileInfo')
+          .collection('adminprofileList')
           .doc(userID)
           .get()
           .then((ds) {
-        ad_year = ds.get('ad_year');
         name = ds.get('name');
         department = ds.get('department');
         gender = ds.get('gender');
-        semester = ds.get('semester');
         sap_id = ds.get('sap_id');
-        print(ad_year);
         print(name);
         print(sap_id);
         print(department);
@@ -126,18 +120,6 @@ class _ProfileState extends State<Profile> {
                         alignment: Alignment.centerLeft,
                         child: Text(
                           "Gender\n$gender",
-                          style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 20,
-                              color: Colors.white),
-                        )),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Current year  \n$ad_year",
                           style: TextStyle(
                               fontFamily: 'Roboto',
                               fontSize: 20,

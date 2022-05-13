@@ -1,28 +1,42 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_firebase/admin/admin_registration.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_firebase/ServiceManager/AuthenticationService.dart';
+import 'package:image_firebase/admin/bottombar.dart';
 
-class RegistrationScreen extends StatefulWidget {
-  @override
-  _RegistrationScreenState createState() => _RegistrationScreenState();
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MaterialApp(
+    initialRoute: '/login',
+    routes: {
+      '/login': (context) => LoginScreen(),
+      '/register': (context) => RegistrationScreen(),
+    },
+  ));
 }
 
-class _RegistrationScreenState extends State<RegistrationScreen> {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final _key = GlobalKey<FormState>();
 
   final AuthenticationService _auth = AuthenticationService();
 
-  TextEditingController _nameController = TextEditingController();
   TextEditingController _emailContoller = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    future:
+    Firebase.initializeApp();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Registration form"),
-        backgroundColor: Colors.teal,
+        title: Text("Login Screen"),
       ),
       body: Container(
         color: Colors.deepPurpleAccent,
@@ -33,9 +47,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Register',
+                  'Login As Admin',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontSize: 30,
                     fontWeight: FontWeight.w600,
                   ),
@@ -44,21 +58,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   padding: const EdgeInsets.all(32.0),
                   child: Column(
                     children: [
-                      TextFormField(
-                        controller: _nameController,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Name cannot be empty';
-                          } else
-                            return null;
-                        },
-                        decoration: InputDecoration(
-                            labelText: 'Name',
-                            labelStyle: TextStyle(
-                              color: Colors.black,
-                            )),
-                        style: TextStyle(color: Colors.black),
-                      ),
                       SizedBox(height: 30),
                       TextFormField(
                         controller: _emailContoller,
@@ -70,8 +69,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                         decoration: InputDecoration(
                             labelText: 'Email',
-                            labelStyle: TextStyle(color: Colors.black)),
-                        style: TextStyle(color: Colors.black),
+                            labelStyle: TextStyle(color: Colors.white)),
+                        style: TextStyle(color: Colors.white),
                       ),
                       SizedBox(height: 30),
                       TextFormField(
@@ -85,36 +84,41 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                         decoration: InputDecoration(
                             labelText: 'Password',
-                            labelStyle: TextStyle(color: Colors.black)),
+                            labelStyle: TextStyle(color: Colors.white)),
                         style: TextStyle(
-                          color: Colors.black,
+                          color: Colors.white,
                         ),
+                      ),
+                      SizedBox(height: 5),
+                      FlatButton(
+                        child: Text('Not registerd? Sign up'),
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            CupertinoPageRoute(
+                              fullscreenDialog: true,
+                              builder: (context) => RegistrationScreen(),
+                            ),
+                          );
+                        },
+                        textColor: Colors.white,
                       ),
                       SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           FlatButton(
-                            child: Text('Sign Up'),
+                            child: Text('Login'),
                             onPressed: () {
                               if (_key.currentState!.validate()) {
-                                //createUser();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text('Processing Data')),
                                 );
                               }
-                              createUser();
+                              signInUser();
                             },
                             color: Colors.white,
                           ),
-                          FlatButton(
-                            child: Text('Cancel'),
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            color: Colors.white,
-                          )
                         ],
                       ),
                     ],
@@ -128,17 +132,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     );
   }
 
-  void createUser() async {
-    dynamic result = await _auth.createNewUser(
-        _nameController.text, _emailContoller.text, _passwordController.text);
-    if (result == null) {
-      print('Email is not valid');
+  void signInUser() async {
+    dynamic authResult =
+        await _auth.loginUser(_emailContoller.text, _passwordController.text);
+    if (authResult == null) {
+      print('Sign in error. could not be able to login');
     } else {
-      print(result.toString());
-      _nameController.clear();
-      _passwordController.clear();
       _emailContoller.clear();
-      Navigator.pop(context);
+      _passwordController.clear();
+      Navigator.push(
+          context, MaterialPageRoute(builder: (context) => BottomBar()));
     }
   }
 }

@@ -43,15 +43,13 @@ class _JoinTeamsState extends State<JoinTeams> {
           .then((ds) {
         name = ds.get('name');
         sap_id = ds.get('sap_id');
-        print(name);
-        print(sap_id);
       }).catchError((e) {
         print(e.toString());
       });
   }
 
   JoinTeamsData(String code) async {
-    await DatabaseManager().joinTeams(code, name, sap_id);
+    await DatabaseManager().joinTeams(code, name, sap_id, userID);
   }
 
   @override
