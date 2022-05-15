@@ -16,9 +16,10 @@ class SecondPage extends StatefulWidget {
 
 class _SecondPageState extends State<SecondPage> {
   List viewMembers = [];
-
+  late List<bool> isChecked =
+      List.generate(viewMembers.length, (index) => false);
   String code = "";
-  int i = 0;
+
   void initState() {
     super.initState();
     fetchDatabaseList(code);
@@ -36,22 +37,6 @@ class _SecondPageState extends State<SecondPage> {
     }
   }
 
-  getCheckbox() {
-    // print("hello");
-    bool isChecked = false;
-    for (i; i < viewMembers.length; i++) {
-      return Checkbox(
-        value: isChecked,
-        onChanged: (value) {
-          setState(() {
-            isChecked = value!;
-          });
-        },
-      );
-      // isChecked = false;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments;
@@ -59,25 +44,43 @@ class _SecondPageState extends State<SecondPage> {
 
     fetchDatabaseList(code);
     return Scaffold(
-        appBar: AppBar(title: Text("Teams")),
-        body: Container(
-            child: ListView.builder(
-                itemCount: viewMembers.length,
-                itemBuilder: (context, index) {
-                  return Card(
-                    child: ListTile(
-                      title: Text(viewMembers[index]['name']),
-                      subtitle: Text(viewMembers[index]['sap_id'].toString()),
-                      leading: CircleAvatar(
-                        // child: Image(
-                        //   image: AssetImage('assets/Profile_Image.png'),
-                        // ),
-                        child: new Icon(Icons.account_box),
-                      ),
-                      trailing: getCheckbox(),
-                      //
-                    ),
-                  );
-                })));
+      appBar: AppBar(title: Text("Teams")),
+      body: Container(
+        child: ListView.builder(
+          itemCount: viewMembers.length,
+          itemBuilder: (context, index) {
+            return Card(
+              child: ListTile(
+                title: Text(viewMembers[index]['name']),
+                subtitle: Text(viewMembers[index]['sap_id'].toString()),
+                leading: CircleAvatar(
+                  // child: Image(
+                  //   image: AssetImage('assets/Profile_Image.png'),
+                  // ),
+                  child: new Icon(Icons.account_box),
+                ),
+                trailing: Checkbox(
+                  onChanged: (checked) {
+                    setState(
+                      () {
+                        isChecked[index] = checked!;
+                      },
+                    );
+                  },
+                  value: isChecked[index],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+    // getCheckbox((value) {
+    //   setState(() {
+    //     print('hi');
+    //     val = value!;
+    //   });
+    // },),
+    //
   }
 }
