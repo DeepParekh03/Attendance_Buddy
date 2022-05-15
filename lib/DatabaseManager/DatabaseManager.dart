@@ -1,7 +1,7 @@
-// import 'dart:html';
-
+// import 'dart:js';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
+// import 'package:flutter/material.dart';
 
 class DatabaseManager {
   CollectionReference profileList =
@@ -37,6 +37,27 @@ class DatabaseManager {
     });
   }
 
+  //read sub collection
+  Future viewTeamMembers(code) async {
+    List members = [];
+
+    try {
+      await teamList
+          .doc(code)
+          .collection('team_memebers')
+          .get()
+          .then((querySnapshot) {
+        querySnapshot.docs.forEach((element) {
+          members.add(element.data());
+        });
+      });
+      return members;
+    } catch (e) {
+      print(e.toString());
+      return null;
+    }
+  }
+
 //update admin profile
 
   Future updateAdminList(
@@ -59,13 +80,16 @@ class DatabaseManager {
   }
 
   //create teams
-  Future<void> createTeams(String name, String code, String id) {
+  Future<void> createTeams(
+      String name, String code, String id, String department, String subject) {
     return teamList
         .doc(code)
         .set({
           'name': name,
           'code': code,
           'id': id,
+          'department': department,
+          'subject': subject,
         })
         .then((value) => print("User Added"))
         .catchError((error) => print("Failed to add user: $error"));
@@ -95,24 +119,34 @@ class DatabaseManager {
     teamList
         .doc(code)
         .collection("team_members")
-        .add({"sap_id": sap_id, "name": name, 'userid': uid});
+        .add({"sap_id": sap_id, "name": name, 'userid': uid}).then(
+            (value) => print("Student added"));
   }
 
   //view teams student
 
-  Future viewTeamsStudent(uid) async {
-    List itemsList = [];
+  // Future viewTeamsStudent(uid) async {
+  //   List itemsList = [];
 
-    try {
-      await teamList.get().then((querySnapshot) {
-        querySnapshot.docs.forEach((element) {
-          itemsList.add(element.data());
-        });
-      });
-      return itemsList;
-    } catch (e) {
-      print(e.toString());
-      return null;
-    }
-  }
+  //   try {
+  //     var stream =
+  //         FirebaseFirestore.instance.collection('teamList').snapshots();
+  //     return StreamBuilder(
+  //         stream: stream,
+  //         builder:
+  //             (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+  //           switch (snapshot.connectionState) {
+  //             case ConnectionState.none:
+  //             case ConnectionState.waiting:
+  //               return Center(child: Text("Please Wait..."));
+  //             default:
+  //             if(snapshot.hasData){
+  //               if()
+  //             }
+  //           }
+  //         });
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  //}
 }

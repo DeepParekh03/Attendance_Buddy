@@ -22,7 +22,8 @@ class _TeamsState extends State<Teams> {
 
   TextEditingController _codeContoller = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-
+  TextEditingController _subjectController = TextEditingController();
+  TextEditingController _departmentController = TextEditingController();
   String userID = "";
 
   @override
@@ -36,8 +37,9 @@ class _TeamsState extends State<Teams> {
     userID = getUser.uid;
   }
 
-  createTeamsData(String name, String code, String id) async {
-    await DatabaseManager().createTeams(name, code, id);
+  createTeamsData(String name, String code, String id, String department,
+      String subject) async {
+    await DatabaseManager().createTeams(name, code, id, department, subject);
   }
 
   @override
@@ -72,6 +74,28 @@ class _TeamsState extends State<Teams> {
                     ),
                   ),
                 ),
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: TextField(
+                    controller: _subjectController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Subject',
+                      hintText: 'Enter the Subject',
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.all(15),
+                  child: TextField(
+                    controller: _departmentController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      labelText: 'Department',
+                      hintText: 'Enter your Department',
+                    ),
+                  ),
+                ),
                 RaisedButton(
                   textColor: Colors.white,
                   color: Colors.blue,
@@ -85,7 +109,8 @@ class _TeamsState extends State<Teams> {
   }
 
   submit(BuildContext context) {
-    createTeamsData(_nameController.text, _codeContoller.text, userID);
+    createTeamsData(_nameController.text, _codeContoller.text, userID,
+        _departmentController.text, _subjectController.text);
     _nameController.clear();
     _codeContoller.clear();
   }

@@ -1,9 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // import 'dart:html';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_firebase/ServiceManager/AuthenticationService.dart';
 import 'package:image_firebase/DatabaseManager/DatabaseManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_firebase/admin/attendance_list.dart';
+import 'package:image_firebase/admin/createTeams.dart';
 
 class ViewTeams extends StatefulWidget {
   const ViewTeams({Key? key}) : super(key: key);
@@ -14,8 +17,10 @@ class ViewTeams extends StatefulWidget {
 
 class _ViewTeamsState extends State<ViewTeams> {
   String userID = "";
+  String code = "";
   final AuthenticationService _auth = AuthenticationService();
   List viewTeamList = [];
+
   @override
   void initState() {
     super.initState();
@@ -57,6 +62,15 @@ class _ViewTeamsState extends State<ViewTeams> {
                         // ),
                         child: new Icon(Icons.group),
                       ),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SecondPage(),
+                                settings: RouteSettings(
+                                    arguments: viewTeamList[index]['code']
+                                        .toString())));
+                      },
                     ),
                   );
                 })));
