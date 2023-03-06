@@ -104,7 +104,6 @@ class _PracticalPageState extends State<PracticalPage> {
             Container(
               margin: const EdgeInsets.only(bottom: 70.0),
               child: ElevatedButton(
-               
                 onPressed: () {
                   // print(data);
                   // print(list);
