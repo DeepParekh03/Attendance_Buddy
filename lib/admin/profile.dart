@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_firebase/ServiceManager/AuthenticationService.dart';
@@ -5,12 +7,9 @@ import 'package:image_firebase/DatabaseManager/DatabaseManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(const Profile());
-}
+import 'package:image_firebase/admin/colors.dart';
+import 'package:image_firebase/admin/uploadProfilePhoto.dart';
+import 'package:image_picker/image_picker.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -22,11 +21,15 @@ class Profile extends StatefulWidget {
 class _ProfileState extends State<Profile> {
   final AuthenticationService _auth = AuthenticationService();
 
+  var _image;
+  final ImagePicker _picker = ImagePicker();
+
   String userID = "";
   String name = " ";
   String department = "";
   String gender = "";
   double sap_id = 0.0;
+  String url = "";
 
   @override
   void initState() {
@@ -39,28 +42,38 @@ class _ProfileState extends State<Profile> {
     userID = getUser.uid;
     if (getUser != null)
       await FirebaseFirestore.instance
-          .collection('adminprofileList')
+          .collection("profilePhoto")
           .doc(userID)
           .get()
-          .then((ds) {
-        name = ds.get('name');
-        department = ds.get('department');
-        gender = ds.get('gender');
-        sap_id = ds.get('sap_id');
-        print(name);
-        print(sap_id);
-        print(department);
-        print(gender);
-      }).catchError((e) {
-        print(e.toString());
+          .then((value) {
+        url = value.get('imageURL');
+        print(url);
       });
+    await FirebaseFirestore.instance
+        .collection('adminprofileList')
+        .doc(userID)
+        .get()
+        .then((ds) {
+      name = ds.get('name');
+      department = ds.get('department');
+      gender = ds.get('gender');
+      sap_id = ds.get('sap_id');
+      print(name);
+      print(sap_id);
+      print(department);
+      print(gender);
+    }).catchError((e) {
+      print(e.toString());
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color.fromARGB(255, 32, 32, 32),
-        appBar: AppBar(title: Text("Profile Screen")),
+        backgroundColor: ColorsUsed.backgroundColor,
+        appBar: AppBar(
+            title: Text("Profile Screen"),
+            backgroundColor: ColorsUsed.appBarColor),
         body: Container(
           child: FutureBuilder(
             future: fetchUserInfo(),
@@ -68,22 +81,48 @@ class _ProfileState extends State<Profile> {
               if (snapshot.connectionState == ConnectionState.done) {
                 return Container(
                   child: Column(children: [
-                    Center(
-                      child: CircleAvatar(
-                        backgroundImage: AssetImage("images/profile.jpg"),
-                        radius: 100,
+                    Column(children: [
+                      Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage("images/profile_back.png"),
+                                fit: BoxFit.cover)),
+                        child: Container(
+                          width: double.infinity,
+                          height: 200,
+                          child: Stack(
+                            alignment: Alignment(0.0, 2.5),
+                            children: <Widget>[
+                              CircleAvatar(
+                                  radius: 60,
+                                  backgroundImage: NetworkImage(url)),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
+                    ]),
                     SizedBox(
                       height: 50,
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "SAP ID \n$sap_id",
+                        "SAP ID ",
                         style: TextStyle(
                           fontFamily: 'Roboto',
-                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          color: ColorsUsed.uiColor,
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "$sap_id",
+                        style: TextStyle(
+                          fontFamily: 'Roboto',
+                          color: ColorsUsed.uiColor,
                           fontSize: 20,
                         ),
                       ),
@@ -93,13 +132,12 @@ class _ProfileState extends State<Profile> {
                     ),
                     Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Department \n$department",
-                        style: TextStyle(
+                      child: Text("Department \n$department",
+                          style: TextStyle(
                             fontFamily: 'Roboto',
                             fontSize: 20,
-                            color: Colors.white),
-                      ),
+                            color: ColorsUsed.uiColor,
+                          )),
                     ),
                     SizedBox(
                       height: 20,
@@ -109,9 +147,10 @@ class _ProfileState extends State<Profile> {
                         child: Text(
                           "Name \n$name",
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 20,
-                              color: Colors.white),
+                            fontFamily: 'Roboto',
+                            fontSize: 20,
+                            color: ColorsUsed.uiColor,
+                          ),
                         )),
                     SizedBox(
                       height: 20,
@@ -121,13 +160,32 @@ class _ProfileState extends State<Profile> {
                         child: Text(
                           "Gender\n$gender",
                           style: TextStyle(
-                              fontFamily: 'Roboto',
-                              fontSize: 20,
-                              color: Colors.white),
+                            fontFamily: 'Roboto',
+                            fontSize: 20,
+                            color: ColorsUsed.uiColor,
+                          ),
                         )),
                     SizedBox(
                       height: 20,
                     ),
+                    Align(
+                        alignment: Alignment.center,
+                        child:  TextButton(
+                  style:ButtonStyle(foregroundColor: MaterialStateProperty.all<Color>(ColorsUsed.uiColor)
+                  ), 
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ProfilePhoto()));
+                          },
+                          child: Text(
+                            "Edit ",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )),
                   ]),
                 );
               }

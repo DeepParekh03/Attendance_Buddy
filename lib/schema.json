@@ -1,0 +1,51 @@
+{
+"level": "collection",
+"teamList":{
+    "level":"document",
+    "team_code":{
+        "team_name":"subject_name",
+        "team_code":"code",
+        "prac_hours":"no_of_hours",
+        "theory_hours":"no_of_hours"
+    },
+    "level": "collection",
+        "team_memebers":{
+            "level":"document",
+            "AUTO":{
+                "name":"name",
+                "sap_id":"sap_id",
+                "user_id":"user_id",
+            }
+        }
+
+    },
+    "level":"collection",
+        "attendance":{
+            "level":"document_theory":{
+                "level":"collection",{
+                    "theory_attendance":{
+                        "level":"document",
+                        "hour_no":{
+                            "sap_id":"state",
+                        }
+                    }
+                }
+            }
+        }
+    }
+    "level":"collection",{
+        "attendance":{
+            "level":"document_practical":{
+                "level":"collection",{
+                    "practical_attendance":{
+                        "level":"document",
+                        "hour_no":{
+                            "sap_id":"state",
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+}

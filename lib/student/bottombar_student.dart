@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:image_firebase/student/homescreen.dart';
+import 'package:image_firebase/student/dashboard_student.dart';
 import 'package:image_firebase/student/teams.dart';
 import 'package:image_firebase/student/profile.dart';
 
-class BottomBar extends StatefulWidget {
-  const BottomBar({Key? key}) : super(key: key);
+class BottomBarStudent extends StatefulWidget {
+  const BottomBarStudent({Key? key}) : super(key: key);
 
   @override
-  State<BottomBar> createState() => _BottomBarState();
+  State<BottomBarStudent> createState() => _BottomBarStudentState();
 }
 
-class _BottomBarState extends State<BottomBar> {
+class _BottomBarStudentState extends State<BottomBarStudent> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    HomeScreenStudent(),
+    DashboardScreenStudent(),
     ViewTeams(),
     Profile(),
   ];

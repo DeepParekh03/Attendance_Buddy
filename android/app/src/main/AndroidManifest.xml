@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.image_firebase">
    <application
-        android:label="image_firebase"
+        android:label="Attendance Buddy"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

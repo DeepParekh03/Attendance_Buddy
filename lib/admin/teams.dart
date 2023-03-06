@@ -5,7 +5,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:image_firebase/ServiceManager/AuthenticationService.dart';
 import 'package:image_firebase/DatabaseManager/DatabaseManager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:image_firebase/admin/attendance_list.dart';
+import 'package:image_firebase/admin/colors.dart';
+import 'package:image_firebase/admin/teams_next.dart';
 import 'package:image_firebase/admin/createTeams.dart';
 
 class ViewTeams extends StatefulWidget {
@@ -47,7 +48,11 @@ class _ViewTeamsState extends State<ViewTeams> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: Text("Teams")),
+        backgroundColor: ColorsUsed.backgroundColor,
+        appBar: AppBar(
+          title: Text("Teams"),
+          backgroundColor: ColorsUsed.appBarColor,
+        ),
         body: Container(
             child: ListView.builder(
                 itemCount: viewTeamList.length,
@@ -57,16 +62,20 @@ class _ViewTeamsState extends State<ViewTeams> {
                       title: Text(viewTeamList[index]['name']),
                       subtitle: Text(viewTeamList[index]['code']),
                       leading: CircleAvatar(
+                        backgroundColor: ColorsUsed.uiColor,
                         // child: Image(
                         //   image: AssetImage('assets/Profile_Image.png'),
                         // ),
-                        child: new Icon(Icons.group),
+                        child: new Icon(
+                          Icons.group,
+                          color: Colors.white,
+                        ),
                       ),
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SecondPage(),
+                                builder: (context) => ButtonData(),
                                 settings: RouteSettings(
                                     arguments: viewTeamList[index]['code']
                                         .toString())));

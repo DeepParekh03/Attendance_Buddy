@@ -1,3 +1,5 @@
+import 'dart:ffi';
+import 'package:image_firebase/admin/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:image_firebase/ServiceManager/AuthenticationService.dart';
@@ -50,39 +52,56 @@ class _JoinTeamsState extends State<JoinTeams> {
 
   JoinTeamsData(String code) async {
     await DatabaseManager().joinTeams(code, name, sap_id, userID);
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Create Teams'),
-        ),
-        body: Padding(
-            padding: EdgeInsets.all(15),
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.all(15),
-                  child: TextField(
-                    controller: _codeContoller,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Team Code',
-                      hintText: 'Enter Team Code',
-                    ),
+      backgroundColor: ColorsUsed.backgroundColor,
+      appBar: AppBar(
+        title: Text('Join Teams'),
+        backgroundColor: ColorsUsed.appBarColor,
+      ),
+      body: SingleChildScrollView(
+          child: Column(
+        children: [
+          Image.asset(
+            "images/join11.png",
+            height: 250,
+            width: 250,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.all(15),
+                child: TextField(
+                  controller: _codeContoller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Team Code',
+                    hintText: 'Enter Team Code',
                   ),
                 ),
-                RaisedButton(
-                  textColor: Colors.white,
-                  color: Colors.blue,
-                  child: Text('Join Teams'),
-                  onPressed: () {
-                    submit(context);
-                  },
-                )
-              ],
-            )));
+              ),
+              ElevatedButton(
+                
+                child: Text(
+                  'Join Teams',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+                onPressed: () {
+                  submit(context);
+                },
+              )
+            ],
+          ),
+        ],
+      )),
+    );
   }
 
   submit(BuildContext context) {

@@ -6,13 +6,14 @@ class AuthenticationService {
 
 // registration with email and password
 
-  Future createNewUser(String name, String email, String password) async {
+  Future createNewUser(
+      String name, String email, String password, double sap) async {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User? user = result.user;
       await DatabaseManager()
-          .createUserData(name, 'Male', 6, 'IT', 3, 57498190001, user!.uid);
+          .createUserData(name, 'Male', 6, 'IT', 3, sap, user!.uid);
       return user;
     } catch (e) {
       print(e.toString());

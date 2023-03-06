@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:image_firebase/admin/homescreen.dart';
+import 'package:image_firebase/admin/dashboardtrial.dart';
+//import 'package:image_firebase/admin/homescreen.dart';
 import 'package:image_firebase/admin/teams.dart';
 import 'package:image_firebase/admin/profile.dart';
 
@@ -13,7 +14,7 @@ class BottomBar extends StatefulWidget {
 class _BottomBarState extends State<BottomBar> {
   int _selectedIndex = 0;
   final List<Widget> _children = [
-    HomeScreenStudent(),
+    DashBoardScreen(),
     ViewTeams(),
     Profile(),
   ];
